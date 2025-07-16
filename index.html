@@ -5,25 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product List</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    button { padding: 10px 15px; cursor: pointer; margin-left: 10px; }
-    form div { margin-bottom: 15px; }
-
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 20px;
+      background-color: #f0f8ff;
+      background-image: radial-gradient(#ffffff 1px, transparent 1px), radial-gradient(#ffffff 1px, transparent 1px);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 15px;
+      cursor: pointer;
+      margin-left: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #d62828;
+      color: white;
+    }
+    button:hover {
+      background-color: #a61b1b;
+    }
+    form div {
+      margin-bottom: 15px;
+    }
     #product-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 20px;
     }
-
     .product-card {
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      border: 2px solid #008000;
+      border-radius: 10px;
       padding: 10px;
+      background-color: #ffffff;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
       width: 100%;
       box-sizing: border-box;
     }
-  </style>
+</style>
 </head>
 <body>
   <header>
@@ -38,6 +63,108 @@
 
   </div>
 
+
+  <template id="add-product-template">
+    <header>
+      <h1>Product Add</h1>
+      <div>
+        <button onclick="saveProductFromForm()">SAVE</button>
+        <button onclick="window.location.href='index.html'">CANCEL</button>
+      </div>
+    </header>
+    <form id="product_form">
+      <div>
+        <label for="sku">SKU:</label>
+        <input type="text" id="sku" name="sku" required>
+      </div>
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div>
+        <label for="price">Price ($):</label>
+        <input type="number" step="0.01" id="price" name="price" required>
+      </div>
+      <div>
+        <label for="productType">Type Switcher:</label>
+        <select id="productType" name="productType" required onchange="handleTypeChange()">
+          <option value="">Select type</option>
+          <option value="DVD">DVD</option>
+          <option value="Book">Book</option>
+          <option value="Furniture">Furniture</option>
+        </select>
+      </div>
+      <div id="type-specific"></div>
+    </form>
+  </template>
+
+  <script>
+    function handleTypeChange() {
+      const type = document.getElementById('productType').value;
+      const container = document.getElementById('type-specific');
+      container.innerHTML = '';
+
+      if (type === 'DVD') {
+        container.innerHTML = `
+          <label for="size">Size (MB):</label>
+          <input type="number" id="size" name="size" required>
+          <p>Please provide size in MB</p>
+        `;
+      } else if (type === 'Book') {
+        container.innerHTML = `
+          <label for="weight">Weight (KG):</label>
+          <input type="number" id="weight" name="weight" required>
+          <p>Please provide weight in KG</p>
+        `;
+      } else if (type === 'Furniture') {
+        container.innerHTML = `
+          <label for="height">Height (CM):</label>
+          <input type="number" id="height" name="height" required>
+          <label for="width">Width (CM):</label>
+          <input type="number" id="width" name="width" required>
+          <label for="length">Length (CM):</label>
+          <input type="number" id="length" name="length" required>
+          <p>Please provide dimensions in HxWxL format</p>
+        `;
+      }
+    }
+
+    if (window.location.pathname.includes('add-product.html')) {
+      document.body.innerHTML = document.getElementById('add-product-template').innerHTML;
+    }
+  </script>
   <script src="app.js"></script>
+
+  <script>
+    const snowflakes = [];
+    for (let i = 0; i < 50; i++) {
+      let snowflake = document.createElement("div");
+      snowflake.innerHTML = "❄️";
+      snowflake.style.position = "fixed";
+      snowflake.style.top = Math.random() * window.innerHeight + "px";
+      snowflake.style.left = Math.random() * window.innerWidth + "px";
+      snowflake.style.fontSize = Math.random() * 10 + 10 + "px";
+      snowflake.style.opacity = Math.random();
+      snowflake.style.pointerEvents = "none";
+      document.body.appendChild(snowflake);
+      snowflakes.push({ el: snowflake, speed: Math.random() * 1 + 0.5 });
+    }
+
+    function animateSnowflakes() {
+      snowflakes.forEach(snowflake => {
+        let top = parseFloat(snowflake.el.style.top);
+        top += snowflake.speed;
+        if (top > window.innerHeight) {
+          top = -20;
+          snowflake.el.style.left = Math.random() * window.innerWidth + "px";
+        }
+        snowflake.el.style.top = top + "px";
+      });
+      requestAnimationFrame(animateSnowflakes);
+    }
+
+    animateSnowflakes();
+  </script>
 </body>
+
 </html>

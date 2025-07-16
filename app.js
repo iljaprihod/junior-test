@@ -1,3 +1,4 @@
+
 function getProducts() {
   return JSON.parse(localStorage.getItem('products') || '[]');
 }
@@ -38,6 +39,7 @@ function getTypeDetails(product) {
     default: return '';
   }
 }
+
 
 function massDelete() {
   const checkboxes = document.querySelectorAll('.delete-checkbox:checked');
@@ -90,4 +92,3 @@ if (document.readyState !== 'loading') {
 } else {
   document.addEventListener('DOMContentLoaded', loadProducts);
 }
-
