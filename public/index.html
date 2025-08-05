@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product List</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .product-card { border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 10px 0; }
+    .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+    .product-card { border: 1px solid #ccc; border-radius: 8px; padding: 10px; position: relative; }
+    .delete-checkbox { position: absolute; top: 10px; left: 10px; }
     button { padding: 10px 15px; cursor: pointer; margin-left: 10px; }
-    form div { margin-bottom: 15px; }
+    footer { margin-top: 30px; text-align: center; font-size: 14px; color: #777; }
   </style>
 </head>
 <body>
+
   <header>
     <h1>Product List</h1>
     <div>
@@ -21,80 +24,82 @@
     </div>
   </header>
 
-  <div id="product-container">
-    <!-- Продукты будут подгружены JavaScript -->
-  </div>
+  <form id="product-form">
+    <div id="product-container" class="product-list">
+      <!-- Продукты будут подгружены сюда -->
+    </div>
+  </form>
 
-  <!-- Шаблон страницы добавления -->
-  <template id="add-product-template">
-    <header>
-      <h1>Product Add</h1>
-      <div>
-        <button onclick="saveProductFromForm()">SAVE</button>
-        <button onclick="window.location.href='index.html'">CANCEL</button>
-      </div>
-    </header>
-    <form id="product_form">
-      <div>
-        <label for="sku">SKU:</label>
-        <input type="text" id="sku" name="sku" required>
-      </div>
-      <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-      </div>
-      <div>
-        <label for="price">Price ($):</label>
-        <input type="number" step="0.01" id="price" name="price" required>
-      </div>
-      <div>
-        <label for="productType">Type Switcher:</label>
-        <select id="productType" name="productType" required onchange="handleTypeChange()">
-          <option value="">Select type</option>
-          <option value="DVD">DVD</option>
-          <option value="Book">Book</option>
-          <option value="Furniture">Furniture</option>
-        </select>
-      </div>
-      <div id="type-specific"></div>
-    </form>
-  </template>
+  <footer>
+    <hr />
+    <p>Scandiweb Test Assignment</p>
+  </footer>
 
   <script>
-    function handleTypeChange() {
-      const type = document.getElementById('productType').value;
-      const container = document.getElementById('type-specific');
+    // Получение всех продуктов с сервера
+    async function fetchProducts() {
+      const response = await fetch('/api/products.php');
+      const products = await response.json();
+
+      const container = document.getElementById('product-container');
       container.innerHTML = '';
 
-      if (type === 'DVD') {
-        container.innerHTML = `
-          <label for="size">Size (MB):</label>
-          <input type="number" id="size" name="size" required>
-          <p>Please provide size in MB</p>
+      products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        card.innerHTML = `
+          <input type="checkbox" class="delete-checkbox" data-sku="${product.sku}">
+          <p><strong>${product.sku}</strong></p>
+          <p>${product.name}</p>
+          <p>${product.price} $</p>
+          <p>${getProductAttribute(product)}</p>
         `;
-      } else if (type === 'Book') {
-        container.innerHTML = `
-          <label for="weight">Weight (KG):</label>
-          <input type="number" id="weight" name="weight" required>
-          <p>Please provide weight in KG</p>
-        `;
-      } else if (type === 'Furniture') {
-        container.innerHTML = `
-          <label for="height">Height (CM):</label>
-          <input type="number" id="height" name="height" required>
-          <label for="width">Width (CM):</label>
-          <input type="number" id="width" name="width" required>
-          <label for="length">Length (CM):</label>
-          <input type="number" id="length" name="length" required>
-          <p>Please provide dimensions in HxWxL format</p>
-        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function getProductAttribute(product) {
+      switch (product.type) {
+        case 'DVD':
+          return `Size: ${product.size} MB`;
+        case 'Book':
+          return `Weight: ${product.weight} KG`;
+        case 'Furniture':
+          return `Dimensions: ${product.height}x${product.width}x${product.length}`;
+        default:
+          return '';
       }
     }
 
-    if (window.location.pathname.includes('add-product.html')) {
-      document.body.innerHTML = document.getElementById('add-product-template').innerHTML;
+    // Массовое удаление
+    async function massDelete() {
+      const checkboxes = document.querySelectorAll('.delete-checkbox:checked');
+      if (checkboxes.length === 0) {
+        alert('Please select at least one product to delete.');
+        return;
+      }
+
+      const ids = Array.from(checkboxes).map(cb => cb.dataset.sku);
+
+      const res = await fetch('/api/product-handler.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', ids: ids })
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        fetchProducts(); // обновляем список
+      } else {
+        alert('Error deleting products');
+      }
     }
+
+    // Загрузка при открытии
+    fetchProducts();
   </script>
-  <script src="app.js"></script>
+
 </body>
 </html>
