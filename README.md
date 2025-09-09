@@ -39,16 +39,16 @@ System Architecture
 mermaid
 Копировать код
 flowchart LR
-    subgraph User_System["Backend and Frontend"]
-        A[Frontend_WebApp] -->|"REST_API"| B[Backend]
+    subgraph User_System["Backend_and_Frontend"]
+        A[Frontend_WebApp] -->|REST_API| B[Backend]
         B --> DB[(Database)]
     end
 
-    subgraph Device_System["ESP32 with Sensors"]
-        D[ESP32_Sensors] -->|"Send_Measurements"| B
+    subgraph Device_System["ESP32_with_Sensors"]
+        D[ESP32_Sensors] -->|Send_Measurements| B
     end
 
-    DB -->|"Provide_Data"| A
+    DB -->|Provide_Data| A
 Authentication & Credentials
 Users
 
@@ -110,7 +110,7 @@ sequenceDiagram
     ESP32->>Backend: Authenticate with credentials
     Backend->>Database: Validate device
 
-    loop Periodic Data
+    loop Periodic_Data
         ESP32->>Backend: Send measurement (temperature, CO2, humidity)
         Backend->>Database: Store measurement
     end
