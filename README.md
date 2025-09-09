@@ -35,9 +35,9 @@ erDiagram
 
     USERS ||--o{ DEVICES : owns
     DEVICES ||--o{ MEASUREMENT : reports
+```
 System Architecture
-mermaid
-Копировать код
+```mermaid
 flowchart LR
     subgraph User_System["Backend_and_Frontend"]
         A[Frontend_WebApp] -->|REST_API| B[Backend]
@@ -49,6 +49,7 @@ flowchart LR
     end
 
     DB -->|Provide_Data| A
+```
 Authentication & Credentials
 Users
 
@@ -88,8 +89,7 @@ Frontend queries data from backend (via REST API).
 User views live and historical data for their devices.
 
 Sequence Diagram – ESP32 Data Submission
-mermaid
-Копировать код
+```mermaid
 sequenceDiagram
     participant ESP32
     participant Backend
@@ -119,3 +119,4 @@ sequenceDiagram
     Backend->>Database: Fetch data
     Backend->>Frontend: Return data
     Frontend->>User: Display charts and reports
+    ```
