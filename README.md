@@ -36,8 +36,6 @@ erDiagram
     USERS ||--o{ DEVICES : owns
     DEVICES ||--o{ MEASUREMENT : reports
 System Architecture
-mermaid
-Копировать код
 flowchart LR
     subgraph User_System["Backend_and_Frontend"]
         A[Frontend_WebApp] -->|REST_API| B[Backend]
@@ -49,7 +47,9 @@ flowchart LR
     end
 
     DB -->|Provide_Data| A
+
 Authentication & Credentials
+
 Users
 
 Register and login through the frontend.
@@ -71,6 +71,7 @@ Validates credentials.
 Accepts and stores sensor data only from authorized devices.
 
 Data Flow Example
+
 User registers → record stored in Users table.
 
 User registers device (MAC address, location, etc.) → stored in Devices table.
@@ -88,8 +89,6 @@ Frontend queries data from backend (via REST API).
 User views live and historical data for their devices.
 
 Sequence Diagram – ESP32 Data Submission
-mermaid
-Копировать код
 sequenceDiagram
     participant ESP32
     participant Backend
