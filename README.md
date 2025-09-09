@@ -35,7 +35,7 @@ erDiagram
 
     USERS ||--o{ DEVICES : owns
     DEVICES ||--o{ MEASUREMENT : reports
-System Architecture
+    System Architecture
 flowchart LR
     subgraph User_System["Backend_and_Frontend"]
         A[Frontend_WebApp] -->|REST_API| B[Backend]
@@ -47,8 +47,7 @@ flowchart LR
     end
 
     DB -->|Provide_Data| A
-
-Authentication & Credentials
+    Authentication & Credentials
 
 Users
 
@@ -87,7 +86,6 @@ Backend validates credentials and stores the data in Measurement table.
 Frontend queries data from backend (via REST API).
 
 User views live and historical data for their devices.
-
 Sequence Diagram – ESP32 Data Submission
 sequenceDiagram
     participant ESP32
