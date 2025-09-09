@@ -89,7 +89,9 @@ Frontend queries data from backend (via REST API).
 User views live and historical data for their devices.
 
 Sequence Diagram – ESP32 Data Submission
+
 ```mermaid
+
 sequenceDiagram
     participant ESP32
     participant Backend
