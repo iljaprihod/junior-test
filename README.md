@@ -121,4 +121,5 @@ sequenceDiagram
     Backend->>Database: Fetch data
     Backend->>Frontend: Return data
     Frontend->>User: Display charts and reports
+    
     ```
