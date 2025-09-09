@@ -40,15 +40,15 @@ mermaid
 Копировать код
 flowchart LR
     subgraph User_System["Backend and Frontend"]
-        A[Frontend WebApp] -->|REST API| B[Backend]
+        A[Frontend_WebApp] -->|"REST_API"| B[Backend]
         B --> DB[(Database)]
     end
 
     subgraph Device_System["ESP32 with Sensors"]
-        D[ESP32 Sensors] -->|Send Measurements| B
+        D[ESP32_Sensors] -->|"Send_Measurements"| B
     end
 
-    DB -->|Provide Data| A
+    DB -->|"Provide_Data"| A
 Authentication & Credentials
 Users
 
