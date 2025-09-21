@@ -4,7 +4,7 @@ describe('Accessibility checks', () => {
     cy.injectAxe(); // встраиваем axe-core
   });
 
-  it('Главная страница не имеет критичных проблем доступности', () => {
+  it('main page no problem', () => {
     cy.checkA11y(null, {
       runOnly: {
         type: 'tag',
@@ -13,20 +13,20 @@ describe('Accessibility checks', () => {
     });
   });
 
-  it('Страница добавления продукта доступна', () => {
+  it('add product good', () => {
     cy.contains('ADD').click();
     cy.injectAxe();
     cy.checkA11y('form#product_form');
   });
 
-  it('Форма с выбранным DVD доступна', () => {
+  it('dvd good', () => {
     cy.contains('ADD').click();
     cy.get('#productType').select('DVD');
     cy.injectAxe();
     cy.checkA11y('#type-specific');
   });
 
-  it('Форма с выбранным Furniture доступна', () => {
+  it('furnuture good', () => {
     cy.contains('ADD').click();
     cy.get('#productType').select('Furniture');
     cy.injectAxe();
